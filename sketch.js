@@ -1,6 +1,5 @@
-let chibi, floor, state;
+let chibi, floor, state, timer;
 
-const START = -1;
 const IDLE = 0;
 const WALKING_LEFT = 1;
 const WALKING_RIGHT = 2;
@@ -10,11 +9,11 @@ const STAND = 5;
 
 
 function setup() {
-	createCanvas(750, 500);
+	createCanvas(750, 800);
 	world.gravity.y = 5;
 	
-	state = START;
-	chibi = new Sprite();
+	state = FALLING;
+	chibi = new Sprite(width/2, 0 - 100);
 	floor = new Sprite(width / 2, height - 20, width, 60, 'static');
 	
 	loadAnimations();
@@ -98,22 +97,24 @@ function chibiMovement(){
 			chibi.changeAni('fall');
 			chibi.ani.offset.y = 190
 			chibi.vel.x = 0;
-			chibi.vel.y = 4;
+			chibi.vel.y = 6;
 			if (chibi.colliding(floor)) {
-				state = STAND;
+				state = IDLE;
 			}
 			break;
 
-		case STAND:
-			chibi.changeAni('stand')
-			setTimeout(() => {
-				state = IDLE;
-			}, 3600);
+			//figure out later
+		// case STAND:
+		// 	chibi.changeAni('stand')
+		// 		setTimeout(() => {
+		// 			state = IDLE;
+		// 		}, 3600);
+		// 	break;
 	}
 }
 
 function chibiInput(){
-	if (chibi.mouse.pressing() >= 15) {
+	if (chibi.mouse.pressing() >= 20) {
 		state = PICK_UP;
 		chibi.offset.x = -20;
 		chibi.offset.y = 55
