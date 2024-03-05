@@ -102,22 +102,21 @@ function chibiMovement(){
 			}
 			break;
 
-		// case STAND:
-		// 	chibi.changeAni('stand')
-		// 	chibi.ani.play(0);
-		// 	resetToIdle(3650);
-		// 	break;
+		case STAND:
+			chibi.changeAni('stand')
+			resetToIdle(3650);
+			break;
 	}
 
-	if (state === STAND) {
-		chibi.changeAni('stand');
-		chibi.ani.play(1);
-		resetToIdle(3650);
-	}
+	// if (state === STAND) {
+	// 	chibi.changeAni('stand');
+	// 	chibi.ani.play(0);
+	// 	resetToIdle(3650);
+	// }
 }
 
 function chibiInput(){
-	if (chibi.mouse.pressing() >= 20) {
+	if (chibi.mouse.pressing() >= 12) {
 		state = PICK_UP;
 		resetTimeout();
 		chibi.offset.x = -20;
