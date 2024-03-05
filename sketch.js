@@ -64,6 +64,8 @@ function draw() {
 }
 
 function chibiMovement(){
+	let FUCK;
+	
 	switch (state) {
 		case IDLE:
 			chibi.changeAni('idle_happy');
@@ -97,14 +99,16 @@ function chibiMovement(){
 			chibi.ani.offset.y = 190
 			chibi.vel.x = 0;
 			chibi.vel.y = 6;
-			if (chibi.colliding(floor)) {
+			FUCK = null;
+			if (chibi.collides(floor)) {
 				state = STAND;
 			}
 			break;
 
 		case STAND:
 			chibi.changeAni('stand')
-			resetToIdle(3650);
+			chibi.ani.play(0)
+			resetToIdle(1000);
 			break;
 	}
 
