@@ -7,7 +7,6 @@ const PICK_UP = 3;
 const FALLING = 4;
 const STAND = 5;
 
-
 function setup() {
 	createCanvas(750, 800);
 	world.gravity.y = 5;
