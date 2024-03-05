@@ -1,4 +1,4 @@
-let chibi, floor, state, timer;
+let chibi, floor, state, timeoutID;
 
 const IDLE = 0;
 const WALKING_LEFT = 1;
@@ -55,7 +55,7 @@ function loadAnimations(){
 
 function draw() {
 	background(255);
-
+	console.log(state);
 	chibiMovement();
 	chibiInput();
 
@@ -64,7 +64,6 @@ function draw() {
 }
 
 function chibiMovement(){
-
 	switch (state) {
 		case IDLE:
 			chibi.changeAni('idle_happy');
@@ -99,27 +98,33 @@ function chibiMovement(){
 			chibi.vel.x = 0;
 			chibi.vel.y = 6;
 			if (chibi.colliding(floor)) {
-				state = IDLE;
+				state = STAND;
 			}
 			break;
 
-			//figure out later
 		// case STAND:
 		// 	chibi.changeAni('stand')
-		// 		setTimeout(() => {
-		// 			state = IDLE;
-		// 		}, 3600);
+		// 	chibi.ani.play(0);
+		// 	resetToIdle(3650);
 		// 	break;
+	}
+
+	if (state === STAND) {
+		chibi.changeAni('stand');
+		chibi.ani.play(1);
+		resetToIdle(3650);
 	}
 }
 
 function chibiInput(){
 	if (chibi.mouse.pressing() >= 20) {
 		state = PICK_UP;
+		resetTimeout();
 		chibi.offset.x = -20;
 		chibi.offset.y = 55
-	} else if (mouse.released()) {
+	} else if (chibi.mouse.released()) {
 		state = FALLING;
+		resetTimeout();
 		chibi.offset.x = 0;
 		chibi.offset.y = 0;
 	}
@@ -137,5 +142,26 @@ function rngMovement(){
 	} else if (!mouse.pressing() && state != FALLING && state != STAND) {
 		state = IDLE;
 	}
-	setTimeout(rngMovement, random(1000, 3000));
+
+	sleep(random( 1000, 3000 )).then(() => { rngMovement(); });
+
 }
+
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function resetToIdle(ms) {
+	if (!timeoutID) {
+		timeoutID = setTimeout(() => {
+			state = IDLE
+		}, ms);
+	}
+}
+
+function resetTimeout() {
+	clearTimeout(timeoutID);
+	timeoutID = null;
+}
+
+
