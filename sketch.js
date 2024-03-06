@@ -6,6 +6,7 @@ const WALKING_RIGHT = 2;
 const PICK_UP = 3;
 const FALLING = 4;
 const STAND = 5;
+const STAND2 = 6;
 
 function setup() {
 	createCanvas(750, 800);
@@ -46,7 +47,7 @@ function loadAnimations(){
 	{frameSize: [500,500], frames: 6, frameDelay: 10});
 
 	chibi.addAni('stand', 'assets/sprites/sprite_sheets/stand.png', 
-	{frameSize: [500, 500], frames: 23, frameDelay: 10});
+	{frameSize: [500, 500], frames: 7, frameDelay: 5});
 
 	chibi.addAni('idle_happy', 'assets/sprites/sprite_sheets/idle_happy.png', 
 	{frameSize: [500, 500], frames: 13, frameDelay: 8});
@@ -63,8 +64,7 @@ function draw() {
 }
 
 function chibiMovement(){
-	let FUCK;
-	
+
 	switch (state) {
 		case IDLE:
 			chibi.changeAni('idle_happy');
@@ -72,8 +72,8 @@ function chibiMovement(){
 			break;
 
 		case WALKING_LEFT:
-			chibi.changeAni('walkLeft')
-			chibi.vel.x = -2
+			chibi.changeAni('walkLeft');
+			chibi.vel.x = -2;
 			if (chibi.x < 70) {
 				state = IDLE;
 			}
@@ -98,24 +98,21 @@ function chibiMovement(){
 			chibi.ani.offset.y = 190
 			chibi.vel.x = 0;
 			chibi.vel.y = 6;
-			FUCK = null;
 			if (chibi.collides(floor)) {
 				state = STAND;
+				chibi.ani.play(0);
 			}
 			break;
 
 		case STAND:
-			chibi.changeAni('stand')
-			chibi.ani.play(0)
-			resetToIdle(1000);
+			chibi.changeAni('stand');
+			resetToIdle(500);
 			break;
 	}
+}
 
-	// if (state === STAND) {
-	// 	chibi.changeAni('stand');
-	// 	chibi.ani.play(0);
-	// 	resetToIdle(3650);
-	// }
+async function bruh() {
+
 }
 
 function chibiInput(){
