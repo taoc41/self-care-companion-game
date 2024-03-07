@@ -47,7 +47,7 @@ function loadAnimations(){
 	{frameSize: [500,500], frames: 6, frameDelay: 10});
 
 	chibi.addAni('stand', 'assets/sprites/sprite_sheets/stand.png', 
-	{frameSize: [500, 500], frames: 7, frameDelay: 5});
+	{frameSize: [500, 500], frames: 23, frameDelay: 5});
 
 	chibi.addAni('idle_happy', 'assets/sprites/sprite_sheets/idle_happy.png', 
 	{frameSize: [500, 500], frames: 13, frameDelay: 8});
@@ -55,7 +55,7 @@ function loadAnimations(){
 
 function draw() {
 	background(255);
-	console.log(state);
+	// console.log(state);
 	chibiMovement();
 	chibiInput();
 
@@ -64,6 +64,7 @@ function draw() {
 }
 
 function chibiMovement(){
+	console.log(chibi.ani.frame);
 
 	switch (state) {
 		case IDLE:
@@ -98,21 +99,18 @@ function chibiMovement(){
 			chibi.ani.offset.y = 190
 			chibi.vel.x = 0;
 			chibi.vel.y = 6;
-			if (chibi.collides(floor)) {
+			if (chibi.collided(floor)) {
 				state = STAND;
-				chibi.ani.play(0);
 			}
 			break;
 
 		case STAND:
 			chibi.changeAni('stand');
-			resetToIdle(500);
+			chibi.ani.play(0);
+			resetToIdle(1900);
+			
 			break;
 	}
-}
-
-async function bruh() {
-
 }
 
 function chibiInput(){
