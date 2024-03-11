@@ -1,22 +1,20 @@
-let chibi, floor, state, timeoutID;
-
+let chibi, floor, state;
 const IDLE = 0;
 const WALKING_LEFT = 1;
 const WALKING_RIGHT = 2;
 const PICK_UP = 3;
 const FALLING = 4;
 const STAND = 5;
-const STAND2 = 6;
 
 function setup() {
-	createCanvas(750, 800);
+	createCanvas(windowWidth, windowHeight);
 	world.gravity.y = 5;
 	
 	state = FALLING;
 	chibi = new Sprite(width/2, 0 - 100);
 	floor = new Sprite(width / 2, height - 20, width, 60, 'static');
 	
-	loadAnimations();
+	haihah();
 	setTimeout(rngMovement(), 5000); // ???? how the fuck does this work
 
 	chibi.w = 250;
@@ -27,7 +25,7 @@ function setup() {
 }
 
 //Loads all the animations (I know this is very ineffecient)
-function loadAnimations(){
+function haihah(){
 	chibi.addAni('walkLeft_start', 'assets/sprites/sprite_sheets/move.png', 
 	{row: 0, frameSize: [500, 500] , frames: 3, frameDelay: 10});
 
@@ -47,7 +45,7 @@ function loadAnimations(){
 	{frameSize: [500,500], frames: 6, frameDelay: 10});
 
 	chibi.addAni('stand', 'assets/sprites/sprite_sheets/stand.png', 
-	{frameSize: [500, 500], frames: 23, frameDelay: 5});
+	{frameSize: [500, 500], frames: 23, frameDelay: 6});
 
 	chibi.addAni('idle_happy', 'assets/sprites/sprite_sheets/idle_happy.png', 
 	{frameSize: [500, 500], frames: 13, frameDelay: 8});
@@ -64,7 +62,8 @@ function draw() {
 }
 
 function chibiMovement(){
-	console.log(chibi.ani.frame);
+	// console.log(chibi.ani.frame);
+	console.log(state);
 
 	switch (state) {
 		case IDLE:
@@ -98,17 +97,18 @@ function chibiMovement(){
 			chibi.changeAni('fall');
 			chibi.ani.offset.y = 190
 			chibi.vel.x = 0;
-			chibi.vel.y = 6;
-			if (chibi.collided(floor)) {
+			// chibi.vel.y = 6;
+			if (chibi.collides(floor)) {
 				state = STAND;
+				chibi.changeAni('stand');
+				chibi.ani.play(0);
 			}
 			break;
 
 		case STAND:
-			chibi.changeAni('stand');
-			chibi.ani.play(0);
-			resetToIdle(1900);
-			
+			if (chibi.ani.frame === 22) {
+				state = IDLE;
+			}
 			break;
 	}
 }
@@ -116,12 +116,11 @@ function chibiMovement(){
 function chibiInput(){
 	if (chibi.mouse.pressing() >= 12) {
 		state = PICK_UP;
-		resetTimeout();
+		chibi.vel.y = 6;
 		chibi.offset.x = -20;
 		chibi.offset.y = 55
 	} else if (chibi.mouse.released()) {
 		state = FALLING;
-		resetTimeout();
 		chibi.offset.x = 0;
 		chibi.offset.y = 0;
 	}
@@ -146,19 +145,6 @@ function rngMovement(){
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function resetToIdle(ms) {
-	if (!timeoutID) {
-		timeoutID = setTimeout(() => {
-			state = IDLE
-		}, ms);
-	}
-}
-
-function resetTimeout() {
-	clearTimeout(timeoutID);
-	timeoutID = null;
 }
 
 
